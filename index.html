@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--BOOTSRAP-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--BULMA CSS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!--MONTSERRAT FONT-->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <!--POPPINS FONT-->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <!--CSS STYLES ARE HERE-->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Montserrat, Poppins;
+            background-color: #f0f9f5;
+        }
+        /* Float four columns side by side */
+        
+        .column {
+            flex: 50%;
+        }
+        /* Responsive columns */
+        
+        @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+                display: block;
+                margin-bottom: 20px;
+            }
+        }
+        /* Remove extra left and right margins, due to padding */
+        
+        .row {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        /* Style the counter cards */
+        
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: start;
+            background-color: #ffffff;
+            height: 80vh;
+        }
+        
+        h1 {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .salaryAmount,
+        .salaryDays,
+        .generalAmount,
+        .generalMonths {
+            margin: 10px;
+        }
+        
+        #days,
+        #months {
+            width: 70%;
+            accent-color: #009b55;
+        }
+        
+        .result,
+        .generalResult {
+            height: 150px;
+            background-color: #F0F9F5;
+            border-radius: 10px;
+            box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-right: 20px;
+        }
+        
+        #nairaSymbol {
+            background-color: #f0f9f5;
+        }
+        
+        .form-control:focus {
+            -webkit-box-shadow: none!important;
+            -moz-box-shadow: none!important;
+            box-shadow: none!important;
+        }
+        
+        #salaryDays,
+        #generalMonths {
+            display: flex;
+            align-items: center;
+        }
+        
+        input.form-control {
+            border-radius: 4px;
+        }
+        
+        input.form-control:focus {
+            border: 2px solid #009B54;
+            background: #f0f9f5;
+        }
+        
+        output {
+            padding-left: 10px;
+        }
+        
+        h2 {
+            padding-bottom: 10px;
+        }
+        
+        #subtext {
+            font-style: normal;
+            font-size: 11px;
+            font-family: Poppins;
+            color: #9e9d9d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <h1>FEWCHOREPAY LOAN CALCULATOR</h1>
+
+                <div class="salaryAmount">
+                    <label for="salaryAmount">How much loan do you want?<br><p id="subtext">Enter an amount between ₦20,000 and ₦100,000</p></label>
+                    <div class="input-group" id="salaryAmount">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="nairaSymbol">₦</span>
+                        </div>
+                        <input id="amount" type="number" min="20000" value="20000" max="100000" step="500" class="form-control col-5" onchange="if(this.value>100000){this.value='100000';}else if(this.value<20000){this.value='20000';}" onclick="computeSalLoan()" onfocus="this.select()"
+                            onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
+                    </div>
+                </div>
+
+                <div class="salaryDays">
+                    <label for="days" class="form-label">How long do you need the loan for?<br><p id="subtext">Select a loan term between 1 day to 31 days</p></label>
+                    <div id="salaryDays">
+                        <input type="range" class="form-range" id="days" value="1" min="1" max="31" step="1" oninput="this.nextElementSibling.value = this.value" onchange="computeSalLoan()">
+                        <output>1</output> &nbsp;day(s)
+
+                    </div>
+                </div>
+
+                <div class="result">
+                    <h2 id="principal"></h2>
+                    <h2 id="totalInterest"></h2>
+                    <h2 id="payment"></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <h1>GENERAL LOAN CALCULATOR</h1>
+
+                <div class="generalAmount">
+                    <label for="genAmount">How much loan do you want?<br><p id="subtext">Enter an amount between ₦50,000 and ₦10,000,000</p></label>
+                    <div class="input-group" id="generalAmount">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="nairaSymbol">₦</span>
+                        </div>
+                        <input id="genAmount" type="number" min="20000" value="50000" max="10000000" step="1000" class="form-control col-5" onchange="if(this.value>10000000){this.value='10000000';}else if(this.value<50000){this.value='50000';}" onclick="computeGenLoan()" onfocus="this.select()"
+                            onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'">
+                    </div>
+                </div>
+
+                <div class="generalMonths">
+                    <label for="months" class="form-label">How long do you need the loan for?<br><p id="subtext">Select a loan term between 1 month to 12 months</p></label>
+                    <div id="generalMonths">
+                        <input type="range" class="form-range" id="months" value="1" min="1" max="12" step="1" oninput="this.nextElementSibling.value = this.value" onchange="computeGenLoan()">
+                        <output>1</output> &nbsp;month(s)
+
+                    </div>
+                </div>
+
+                <div class="generalResult">
+                    <div>
+                        <h2 id="genPrincipal"></h2>
+                        <h2 id="genTotalInterest"></h2>
+                        <h2 id="genPayment"></h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!--JAVASCRIPT LINES ARE HERE-->
+    <script>
+        $("#amount").change(function() {
+            computeSalLoan();
+        });
+
+        function computeSalLoan() {
+            //The global constants of some class functions(value) are determined using the following three line codes
+            const amount = document.querySelector('#amount');
+            const days = document.getElementById('days');
+
+            let principal = parseFloat(amount.value);
+            const time = parseFloat(days.value);
+
+            //The TOTAL INTEREST PAID is calculated by multiplying the principal (amount) by interest rate (0.42%) by amount of days the loan is taken for. Then divide all by 100.
+            let totalInterest = ((principal * 0.42 * time) / 100);
+
+            //The DAILY AMOUNT PAID is calculated by adding the Principal (amount) to TOTAL INTEREST PAID (interest), then dividing all by the amount of days the loan is taken for.
+            let dailyPayment = ((principal + totalInterest) / time).toFixed(2);
+
+            //reg edit to add a comma after every three digits
+            //That is, a comma (,) will be added after every three numbers.
+            //Example 50,000
+            dailyPayment = dailyPayment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            totalInterest = totalInterest.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            principal = principal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            //With the help of innerHTML, the information stored in the "payment" is displayed on the webpage.
+            document.querySelector('#payment').innerHTML = `<b>Daily Payment = ₦ ${dailyPayment}</b>`
+            document.getElementById('principal').innerHTML = `Principal Payment = ₦ ${principal}`
+            document.getElementById('totalInterest').innerHTML = `Total Interest Paid = ₦ ${totalInterest}`
+        }
+
+        $("#genAmount").change(function() {
+            computeGenLoan();
+        });
+
+        function computeGenLoan() {
+            //The global constants of some class functions(value) are determined using the following three line codes
+            const genamount = document.getElementById('genAmount');
+            const months = document.getElementById('months');
+
+            let genPrincipal = parseFloat(genamount.value);
+            const genMonths = parseFloat(months.value);
+
+            //The TOTAL INTEREST PAID is calculated by multiplying the principal (amount) by interest rate (0.42%) by amount of days the loan is taken for. Then divide all by 100.
+            let genTotalInterest = (genPrincipal * 4 * genMonths) / 100;
+
+            //The DAILY AMOUNT PAID is calculated by adding the Principal (amount) to TOTAL INTEREST PAID (interest), then dividing all by the amount of days the loan is taken for.
+            let genMonthlyPayment = ((genPrincipal + genTotalInterest) / genMonths).toFixed(2);
+
+            //reg edit to add a comma after every three digits
+            //That is, a comma (,) will be added after every three numbers.
+            //Example 50,000
+            genMonthlyPayment = genMonthlyPayment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            genTotalInterest = genTotalInterest.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            genPrincipal = genPrincipal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+
+            //With the help of innerHTML, the information stored in the "payment" is displayed on the webpage.
+            document.querySelector('#genPayment').innerHTML = `<b>Monthly Payment = ₦ ${genMonthlyPayment}</b>`
+            document.getElementById('genPrincipal').innerHTML = `Principal Payment = ₦ ${genPrincipal}`
+            document.getElementById('genTotalInterest').innerHTML = `Total Interest Paid = ₦ ${genTotalInterest}`
+        }
+    </script>
+</body>
+
+</html>
